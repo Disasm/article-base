@@ -37,7 +37,7 @@ def item_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
-    return render('items.html', {'item_list': items}, context_instance=RequestContext(request))
+    return render(request, 'items.html', {'items': items})
 
 # show item
 @login_required

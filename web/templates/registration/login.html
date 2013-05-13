@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+
+{% block content %}
+    {% if form.errors %}
+<p class="error">Неправильный логин или пароль.</p>
+    {% endif %}
+
+    <form action='.' method='post' class="form-horizontal">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="/" />
+        <div class="control-group">
+            <label class="control-label" for="username">Логин:</label>
+            <div class="controls">
+                <input type="text" class="input-xlarge" id="username" name="username">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="password">Пароль:</label>
+            <div class="controls">
+                <input type="password" class="input-xlarge" id="password" name="password">
+            </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Войти" class="btn btn-primary" />
+        </div>
+    </form>
+{%endblock %}
