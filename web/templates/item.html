@@ -11,6 +11,10 @@
         <td>{{ item.description }}</td>
     </tr>
     <tr>
+        <th>Теги</th>
+        <td>{{ item.tag_string }}</td>
+    </tr>
+    <tr>
         <th>Имя файла</th>
         <td><a href="{{ item.url }}">{{ item.filename }}</a></td>
     </tr>
@@ -23,5 +27,6 @@
         <td>{{ item.updated }}</td>
     </tr>
 </table>
+<a href="/item/{{ item.id }}/edit/" class="btn btn-warning">Редактировать</a>
 {%endblock %}
 

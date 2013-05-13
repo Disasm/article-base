@@ -20,6 +20,15 @@ class Item(models.Model):
     def url(self):
         return settings.STATIC_URL + "files/" + self.uid + "/" + self.filename;
 
+    def tag_string(self):
+        item_tags = ItemTag.objects.filter(item=self)
+        names = []
+        for it in item_tags:
+            tag = it.tag
+            names.append(tag.name)
+        names = sorted(names)
+        return ", ".join(names)
+
 class ItemTag(models.Model):
     item = models.ForeignKey(Item)
     tag = models.ForeignKey(Tag)

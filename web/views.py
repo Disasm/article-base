@@ -1,14 +1,45 @@
 from web.models import Tag, Item, ItemTag
-from web.forms import AddItemForm
+from web.forms import AddItemForm, EditItemForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 import os
 import os.path
 import hashlib
 from datetime import datetime
+
+def get_tag(name, owner):
+    try:
+        tag = Tag.objects.get(name=name, owner=owner)
+        return tag
+    except ObjectDoesNotExist:
+        tag = Tag()
+        tag.name = name
+        tag.owner = owner
+        tag.save()
+        return tag
+
+def fill_tags(item, tags, owner):
+    l = tags.split(',')
+    names = []
+    for tag in l:
+        tag = tag.strip()
+        if len(tag) > 0:
+            names.append(tag)
+    names = sorted(list(set(names)))
+    if len(names)==0:
+        names.append('unknown')
+
+    # remove old tags
+    ItemTag.objects.filter(item=item).delete()
+
+    # add new tags
+    for name in names:
+        tag = get_tag(name, owner)
+        ItemTag.objects.create(item=item, tag=tag)
 
 # get tag cloud
 @login_required()
@@ -55,6 +86,8 @@ def item_add(request):
             item.updated = datetime.now()
             item.save()
 
+            fill_tags(item, cd['tags'], request.user)
+
             return HttpResponseRedirect('/item/%d' % item.id)
     else:
         form = AddItemForm() # An unbound form
@@ -63,7 +96,24 @@ def item_add(request):
 # edit item
 @login_required
 def item_edit(request, id):
-    pass
+    id = int(id)
+    item = get_object_or_404(Item, pk=id)
+    if request.method == 'POST':
+        form = EditItemForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+
+            item.name = cd['name']
+            item.description = cd['description']
+            item.updated = datetime.now()
+            item.save()
+
+            fill_tags(item, cd['tags'], request.user)
+
+            return HttpResponseRedirect('/item/%d' % item.id)
+    else:
+        form = EditItemForm(initial={'name': item.name, 'description': item.description, 'tags': item.tag_string()})
+    return render(request, 'item_add.html', {'form': form, 'edit': True})
 
 # get item list
 @login_required
