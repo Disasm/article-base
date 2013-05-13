@@ -12,7 +12,13 @@
     </tr>
     <tr>
         <th>Теги</th>
-        <td>{{ item.tag_string }}</td>
+        <td>
+            {% for tag in item.tag_list %}
+            <a href="/tag/{{ tag.id }}/">
+                <i class="icon-tag"></i>
+                {{ tag.name }}</a>{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </td>
     </tr>
     <tr>
         <th>Имя файла</th>

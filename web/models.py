@@ -20,11 +20,13 @@ class Item(models.Model):
     def url(self):
         return settings.STATIC_URL + "files/" + self.uid + "/" + self.filename;
 
+    def tag_list(self):
+        return self.tags.all()
+
     def tag_string(self):
-        item_tags = ItemTag.objects.filter(item=self)
+        tags = self.tags.all()
         names = []
-        for it in item_tags:
-            tag = it.tag
+        for tag in tags:
             names.append(tag.name)
         names = sorted(names)
         return ", ".join(names)
