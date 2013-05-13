@@ -3,32 +3,6 @@
 {% block content %}
 
 <h2>Список файлов</h2>
-{% if items %}
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Название</th>
-            <th>Дата</th>
-        </tr>
-        </thead>
-    {% for item in items %}
-        <tbody>
-        <tr>
-            <td>
-                <a href="{{ item.url }}"><i class="icon-download-alt"></i></a> 
-                <a href="/item/{{ item.id }}/">{{ item.name }}</a> 
-            </td>
-            <td>
-                {{ item.updated }}
-            </td>
-        </tr>
-        </tbody>
-    {% endfor %}
-    </table>
-
-    {% include "pagination.html" %}
-{% else %}
-    <p>Список пуст.</p>
-{% endif %}
+{% include "item_list.html" %}
 
 {% endblock %}
