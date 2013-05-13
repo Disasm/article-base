@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -15,6 +16,9 @@ class Item(models.Model):
     tags = models.ManyToManyField(Tag, through='ItemTag')
     created = models.DateTimeField()
     updated = models.DateTimeField()
+
+    def url(self):
+        return settings.STATIC_URL + "files/" + self.uid + "/" + self.filename;
 
 class ItemTag(models.Model):
     item = models.ForeignKey(Item)
