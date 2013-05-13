@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+
+{% block content %}
+<table class="table table-bordered">
+    <tr>
+        <th>Название</th>
+        <td>{{ item.name }}</td>
+    </tr>
+    <tr>
+        <th>Описание</th>
+        <td>{{ item.description }}</td>
+    </tr>
+    <tr>
+        <th>Имя файла</th>
+        <td>{{ item.filename }}</td>
+    </tr>
+    <tr>
+        <th>Создан</th>
+        <td>{{ item.created | date:"Y-m-d H:i:s" }}</td>
+    </tr>
+    <tr>
+        <th>Обновлен</th>
+        <td>{{ item.updated | date:"Y-m-d H:i:s" }}</td>
+    </tr>
+</table>
+{%endblock %}
+

@@ -1,0 +1,34 @@
+{% extends "main.html" %}
+
+{% block content %}
+    <form action='.' enctype="multipart/form-data" method="post" class="form-horizontal long-form">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <table class="table table-bordered">
+        {% for field in form.visible_fields %}
+        <tr id="tid_{{field.html_name}}">
+            <th>{{ field.label }}</th>
+            <td>
+                {% if field.errors %}<div class="control-group error">{% endif %}
+                {{ field }}
+                {% for error in field.errors %}
+                    <br><span class="help-inline">{{ error }}</span>
+                {% endfor %}
+                {% if field.errors %}</div>{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            {% if edit %}
+            <td><input type="submit" value="Сохранить" class="btn btn-primary" /></td>
+            {% else %}
+            <td><input type="submit" value="Добавить" class="btn btn-primary" /></td>
+            {% endif %}
+            <td></td>
+        </tr>
+        </table>
+    </form>
+{%endblock %}
+

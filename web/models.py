@@ -9,6 +9,7 @@ class Item(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
     filename = models.CharField(max_length=200)
+    size = models.IntegerField()
     uid = models.CharField(max_length=50)
     owner = models.ForeignKey(User)
     tags = models.ManyToManyField(Tag, through='ItemTag')
