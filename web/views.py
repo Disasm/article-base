@@ -10,6 +10,7 @@ import os
 import os.path
 import hashlib
 from datetime import datetime
+from django.utils.timezone import utc
 
 def get_tag(name, owner):
     try:
@@ -125,8 +126,8 @@ def item_add(request):
             item.size = f.size
             item.uid = uid
             item.owner = request.user
-            item.created = datetime.now()
-            item.updated = datetime.now()
+            item.created = datetime.utcnow().replace(tzinfo=utc)
+            item.updated = datetime.utcnow().replace(tzinfo=utc)
             item.save()
 
             fill_tags(item, cd['tags'], request.user)
@@ -148,7 +149,7 @@ def item_edit(request, id):
 
             item.name = cd['name']
             item.description = cd['description']
-            item.updated = datetime.now()
+            item.updated = datetime.utcnow().replace(tzinfo=utc)
             item.save()
 
             fill_tags(item, cd['tags'], request.user)
