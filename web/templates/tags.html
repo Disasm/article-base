@@ -1,0 +1,9 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+{% for tag in tags %}
+{{ tag.name }} - {{ tag.count }}<br>
+{% endfor %}
+
+{% endblock %}

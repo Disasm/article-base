@@ -39,12 +39,13 @@ def fill_tags(item, tags, owner):
     # add new tags
     for name in names:
         tag = get_tag(name, owner)
-        ItemTag.objects.create(item=item, tag=tag)
+        ItemTag.objects.create(item=item, tag=tag, owner=owner)
 
 # get tag cloud
 @login_required()
 def get_tags(request):
-    pass
+    tags = Tag.with_counts(request.user)
+    return render(request, 'tags.html', {'tags': tags})
 
 # get item list and subtags
 @login_required
