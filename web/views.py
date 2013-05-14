@@ -50,7 +50,49 @@ def get_tags(request):
 # get item list and subtags
 @login_required
 def get_tag_items(request, tags):
-    pass
+    l = tags.split(",")
+    ids = []
+    for v in l:
+        ids.append(int(v))
+    ids = sorted(list(set(ids)))
+    tags = Tag.objects.filter(id__in=ids, owner=request.user)
+    
+    # Construct current taglist string
+    ids = []
+    for tag in tags:
+        ids.append(tag.id)
+    tids = ",".join(map(str, ids))
+    if len(tids)>0:
+        tids = tids + ","
+
+    # Get subtags
+    subtags = Tag.subtags(tags)
+
+
+    # Get items by subtags
+    latest_item_list = Item.subitems(tags).order_by('-updated')
+    size = len(latest_item_list)
+    
+    # Filter tag list
+    tags = []
+    for tag in subtags:
+        if tag.count != size:
+            tags.append(tag)
+    subtags = tags
+   
+    # Build pagination
+    page = request.GET.get('page')
+    paginator = Paginator(latest_item_list, 10)
+    try:
+        items = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        items = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        items = paginator.page(paginator.num_pages)
+    
+    return render(request, 'tag_items.html', {'tags': subtags, 'tids': tids, 'items': items})
 
 # add new item
 @login_required

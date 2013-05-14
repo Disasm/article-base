@@ -20,8 +20,27 @@ class Tag(models.Model):
     owner = models.ForeignKey(User)
     
     @staticmethod
+    def subitems_ids(tags):
+        ids = []
+        for tag in tags:
+            ids.append(str(tag.id))
+        n = len(ids)
+        ids = ", ".join(ids)
+
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT item_id FROM web_itemtag
+            WHERE tag_id IN (%s) GROUP BY item_id
+            HAVING count(*) = %d""" % (ids, n))
+        ids = []
+        for row in cursor.fetchall():
+            ids.append(int(row[0]))
+        return ids
+    
+    @staticmethod
     def subtags_ids(tags):
-        ids = Item.subitems_ids(tags)
+        ids = Tag.subitems_ids(tags)
+        ids = map(str, ids)
         ids = ", ".join(ids)
 
         cursor = connection.cursor()
@@ -35,9 +54,21 @@ class Tag(models.Model):
 
     @staticmethod
     def subtags(tags):
-        d = Tag.subitems_ids(tags)
+        old_ids = []
+        for tag in tags:
+            old_ids.append(tag.id)
+
+        d = Tag.subtags_ids(tags)
 
         tags = Tag.objects.filter(id__in=d.keys()).order_by('name')
+
+        # Filter out old tags
+        tags2 = []
+        for tag in tags:
+            if int(tag.id) not in old_ids:
+                tags2.append(tag)
+        tags = tags2
+
         for tag in tags:
             tag.count = d[tag.id]
 
@@ -71,26 +102,10 @@ class Item(models.Model):
     updated = models.DateTimeField()
     
     @staticmethod
-    def subitems_ids(tags):
-        ids = []
-        for tag in tags:
-            ids.append(str(tag.id))
-        n = len(ids)
-        ids = ", ".join(ids)
-
-        cursor = connection.cursor()
-        cursor.execute("""
-            SELECT item_id FROM web_itemtag
-            WHERE tag_id IN (%s) GROUP BY item_id
-            HAVING count(*) = %d""" % (ids, n))
-        ids = []
-        for row in cursor.fetchall():
-            ids.append(int(row[0]))
-        return ids
-
-    @staticmethod
     def subitems(tags):
-        return
+        ids = Tag.subitems_ids(tags)
+
+        return Item.objects.filter(id__in=ids)
 
     def url(self):
         return settings.STATIC_URL + "files/" + self.uid + "/" + self.filename;

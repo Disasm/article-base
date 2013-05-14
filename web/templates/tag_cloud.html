@@ -17,7 +17,7 @@
 <center>
 <div id="tag_cloud">
     {% for tag in tags %}
-    <a href="/tag/{{ tag.id }}/" rel="{{ tag.count }}">{{ tag.name }}</a>
+    <a href="/tag/{{ tids }}{{ tag.id }}/" rel="{{ tag.count }}">{{ tag.name }}</a>
     {% endfor %}
 </div>
 </center>
