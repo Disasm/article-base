@@ -2,8 +2,6 @@
 
 {% block content %}
 
-{% for tag in tags %}
-{{ tag.name }} - {{ tag.count }}<br>
-{% endfor %}
+{% include "tag_cloud.html" %}
 
 {% endblock %}

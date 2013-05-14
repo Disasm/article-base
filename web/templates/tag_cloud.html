@@ -1,0 +1,23 @@
+<script language="JavaScript">
+    $(document).ready(function() { 
+        $("#tag_cloud a").tagcloud({
+            size: {
+                start: 10,
+                end: 20,
+                unit: 'px'
+            },
+            color: {
+                start: "#CDE",
+                end: "#FS2"
+            }
+        });
+    });
+</script>
+
+<center>
+<div id="tag_cloud">
+    {% for tag in tags %}
+    <a href="/tag/{{ tag.id }}/" rel="{{ tag.count }}">{{ tag.name }}</a>
+    {% endfor %}
+</div>
+</center>
