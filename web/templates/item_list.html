@@ -6,6 +6,7 @@
     <div class="box">
         <b><a class="name" href="/item/{{ item.id }}/">{{ item.name }}</a></b><br/>
         {{ item.updated }} <a href="#">редактировать</a><br/>
+        {% if item.description %}{{ item.description }}<br/>{% endif %}
         <a href="{{ item.url }}"><i class="icon-download-alt"></i> скачать</a><br/>
         Теги:
         {% for tag in item.tags.all %}
