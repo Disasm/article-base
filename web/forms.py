@@ -2,9 +2,9 @@ from django import forms
 from django.conf import settings
 
 class AddItemForm(forms.Form):
-    name = forms.CharField(max_length=100)
+    name = forms.CharField(max_length=500)
     description = forms.CharField(max_length=200, required=False)
-    tags = forms.CharField(max_length=200, required=False)
+    tags = forms.CharField(max_length=500, required=False)
     file = forms.FileField()
     
     def clean_file(self):
@@ -20,7 +20,7 @@ class AddItemForm(forms.Form):
         return file
 
 class EditItemForm(forms.Form):
-    name = forms.CharField(max_length=100)
+    name = forms.CharField(max_length=500)
     description = forms.CharField(max_length=200, required=False)
-    tags = forms.CharField(max_length=200, required=False)
+    tags = forms.CharField(max_length=500, required=False)
 

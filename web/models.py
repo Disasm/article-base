@@ -91,7 +91,7 @@ class Tag(models.Model):
         return tags
 
 class Item(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=500)
     description = models.CharField(max_length=200, blank=True)
     filename = models.CharField(max_length=200)
     size = models.IntegerField()
