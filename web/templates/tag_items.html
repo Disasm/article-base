@@ -2,9 +2,15 @@
 
 {% block content %}
 
+<div class="box">
+    Теги:
+    {% for tag in current_tags %}
+        <a href="/tag/{{ tag.id }}/">{{ tag.name }}</a>{% if not forloop.last %},{% endif %}
+    {% endfor %}
+</div>
+
 {% include "tag_cloud.html" %}
 
-<h2>Список файлов</h2>
 {% include "item_list.html" %}
 
 {% endblock %}

@@ -1,25 +1,19 @@
 {% if items %}
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Название</th>
-            <th>Дата</th>
-        </tr>
-        </thead>
+    {% include "pagination.html" %}
+
     {% for item in items %}
-        <tbody>
-        <tr>
-            <td>
-                <a href="{{ item.url }}"><i class="icon-download-alt"></i></a> 
-                <a href="/item/{{ item.id }}/">{{ item.name }}</a> 
-            </td>
-            <td>
-                {{ item.updated }}
-            </td>
-        </tr>
-        </tbody>
+    <br/>
+    <div class="box">
+        <b><a class="name" href="/item/{{ item.id }}/">{{ item.name }}</a></b><br/>
+        {{ item.updated }} <a href="#">редактировать</a><br/>
+        <a href="{{ item.url }}"><i class="icon-download-alt"></i> скачать</a><br/>
+        Теги:
+        {% for tag in item.tags.all %}
+            <a href="/tag/{{ tag.id }}/">{{ tag.name }}</a>{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <br/>
     {% endfor %}
-    </table>
 
     {% include "pagination.html" %}
 {% else %}

@@ -1,0 +1,10 @@
+.box {
+    border: 1px solid #aaa;
+    background-color: #f0f0f0;
+    padding: 10px;
+}
+
+A.name { COLOR: #000000;  }
+A.name:link { COLOR: #000000; }
+A.name:visited { COLOR: #000000; }
+A.name:hover { COLOR: #518EAD; }

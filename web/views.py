@@ -57,6 +57,7 @@ def get_tag_items(request, tags):
         ids.append(int(v))
     ids = sorted(list(set(ids)))
     tags = Tag.objects.filter(id__in=ids, owner=request.user)
+    current_tags = tags
     
     # Construct current taglist string
     ids = []
@@ -93,7 +94,7 @@ def get_tag_items(request, tags):
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
     
-    return render(request, 'tag_items.html', {'tags': subtags, 'tids': tids, 'items': items})
+    return render(request, 'tag_items.html', {'tags': subtags, 'tids': tids, 'items': items, 'current_tags': current_tags})
 
 # add new item
 @login_required
