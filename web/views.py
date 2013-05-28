@@ -12,6 +12,39 @@ import hashlib
 from datetime import datetime
 from django.utils.timezone import utc
 
+def paginator_post_process(page, delta = 3):
+    current = page.number
+    total = page.paginator.num_pages
+
+    if total < 1:
+        return page
+
+    # collect page numbers
+    s = set()
+    for i in range(delta):
+        s.add(i + 1)
+    for i in range(total - delta, total):
+        s.add(i + 1)
+    for i in range(current - delta + 1, current + delta):
+        s.add(i)
+
+    # filter page numbers
+    s2 = set()
+    for e in s:
+        if e >= 1 and e <= total:
+            s2.add(e)
+
+    # get separators
+    l = []
+    for e in s2:
+        if (e-1) not in s2:
+            l.append(-1)
+        l.append(e)
+    l.remove(-1)
+
+    page.paginator.page_numbers = l
+    return page
+
 def get_tag(name, owner):
     try:
         tag = Tag.objects.get(name=name, owner=owner)
@@ -94,6 +127,7 @@ def get_tag_items(request, tags):
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
     
+    items = paginator_post_process(items)
     return render(request, 'tag_items.html', {'tags': subtags, 'tids': tids, 'items': items, 'current_tags': current_tags})
 
 # add new item
@@ -174,6 +208,8 @@ def item_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         items = paginator.page(paginator.num_pages)
+
+    items = paginator_post_process(items)
     return render(request, 'items.html', {'items': items})
 
 # show item

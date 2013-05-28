@@ -1,25 +1,18 @@
-
+{% if items.paginator.num_pages > 1 %}
     <center>
     <div class="pagination">
         <ul>
-            {% if items.has_previous %}
-            <li><a href="?page={{ items.previous_page_number }}{{ page_params|safe }}">&laquo;</a></li>
-            <li><a href="?page={{ items.previous_page_number }}{{ page_params|safe }}">{{ items.previous_page_number }}</a></li>
-            {% else %}
-                <li class="disabled"><a href="#">&laquo;</a></li>
-            {% endif %}
-
-            <li class="active">
-                <a href="#">{{ items.number }}</a>
-            </li>
-            
-
-            {% if items.has_next %}
-            <li><a href="?page={{ items.next_page_number }}{{ page_params|safe }}">{{ items.next_page_number }}</a></li>
-            <li><a href="?page={{ items.next_page_number }}{{ page_params|safe }}">&raquo;</a></li>
-            {% else %}
-                <li class="disabled"><a href="#">&raquo;</a></li>
-            {% endif %}
+            {% for num in items.paginator.page_numbers %}
+                {% if num == -1 %}
+                    <li class="disabled"><a href="#">...</a></li>
+                {% elif num == items.number %}
+                    <li class="active"><a href="#">{{ num }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ num }}{{ page_params|safe }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
         </ul>
     </div>
-    </center>
+</center>
+{% endif %}
+
