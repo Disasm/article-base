@@ -143,7 +143,7 @@ def item_add(request):
             f = request.FILES['file']
             m = hashlib.md5()
             m.update(os.urandom(32))
-            m.update(name)
+            m.update(name.encode('utf8'))
             uid = m.hexdigest()
 
             dir_path = os.path.join(settings.STATIC_ROOT, 'files', uid)
