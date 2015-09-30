@@ -19,6 +19,9 @@ class TagKind(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=100, unique=True)
 
+    def __unicode__(self):
+        return self.name
+
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
     kind = models.ForeignKey(TagKind, null=True)
@@ -94,6 +97,9 @@ class Tag(models.Model):
 
         return tags
 
+    def __unicode__(self):
+        return self.name
+
 class Item(models.Model):
     name = models.CharField(max_length=500)
     description = models.CharField(max_length=200, blank=True)
@@ -123,6 +129,9 @@ class Item(models.Model):
             names.append(tag.name)
         names = sorted(names)
         return ", ".join(names)
+
+    def __unicode__(self):
+        return self.name
 
 class ItemTag(models.Model):
     item = models.ForeignKey(Item)
