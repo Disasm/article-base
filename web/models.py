@@ -15,8 +15,13 @@ class SubTagsManager(TagManager):
         ids = self.subtags_ids(tags)
         return self.get_queryset().filter(id__in=ids.keys())
 
+class TagKind(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=100, unique=True)
+
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    kind = models.ForeignKey(TagKind, null=True)
 
     @staticmethod
     def subitems_ids(tags):
