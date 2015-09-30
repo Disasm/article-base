@@ -17,8 +17,7 @@ class SubTagsManager(TagManager):
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    owner = models.ForeignKey(User)
-    
+
     @staticmethod
     def subitems_ids(tags):
         ids = []
@@ -73,9 +72,9 @@ class Tag(models.Model):
             tag.count = d[tag.id]
 
         return tags
-    
+
     @staticmethod
-    def with_counts(owner):
+    def with_counts():
         cursor = connection.cursor()
         cursor.execute("""
             SELECT tag_id, COUNT(*) FROM web_itemtag
@@ -83,7 +82,7 @@ class Tag(models.Model):
         d = {}
         for row in cursor.fetchall():
             d[int(row[0])] = int(row[1])
-        
+
         tags = Tag.objects.filter(id__in=d.keys()).order_by('name')
         for tag in tags:
             tag.count = d[tag.id]
@@ -96,11 +95,10 @@ class Item(models.Model):
     filename = models.CharField(max_length=200)
     size = models.IntegerField()
     uid = models.CharField(max_length=50)
-    owner = models.ForeignKey(User)
     tags = models.ManyToManyField(Tag, through='ItemTag')
     created = models.DateTimeField()
     updated = models.DateTimeField()
-    
+
     @staticmethod
     def subitems(tags):
         ids = Tag.subitems_ids(tags)
@@ -124,5 +122,4 @@ class Item(models.Model):
 class ItemTag(models.Model):
     item = models.ForeignKey(Item)
     tag = models.ForeignKey(Tag)
-    owner = models.ForeignKey(User)
 

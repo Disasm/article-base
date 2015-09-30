@@ -45,18 +45,17 @@ def paginator_post_process(page, delta = 3):
     page.paginator.page_numbers = l
     return page
 
-def get_tag(name, owner):
+def get_tag(name):
     try:
-        tag = Tag.objects.get(name=name, owner=owner)
+        tag = Tag.objects.get(name=name)
         return tag
     except ObjectDoesNotExist:
         tag = Tag()
         tag.name = name
-        tag.owner = owner
         tag.save()
         return tag
 
-def fill_tags(item, tags, owner):
+def fill_tags(item, tags):
     l = tags.split(',')
     names = []
     for tag in l:
@@ -72,8 +71,8 @@ def fill_tags(item, tags, owner):
 
     # add new tags
     for name in names:
-        tag = get_tag(name, owner)
-        ItemTag.objects.create(item=item, tag=tag, owner=owner)
+        tag = get_tag(name)
+        ItemTag.objects.create(item=item, tag=tag)
 
 # get tag cloud
 @login_required()
@@ -89,7 +88,7 @@ def get_tag_items(request, tags):
     for v in l:
         ids.append(int(v))
     ids = sorted(list(set(ids)))
-    tags = Tag.objects.filter(id__in=ids, owner=request.user)
+    tags = Tag.objects.filter(id__in=ids)
     current_tags = tags
     
     # Construct current taglist string
@@ -160,7 +159,6 @@ def item_add(request):
             item.filename = f.name
             item.size = f.size
             item.uid = uid
-            item.owner = request.user
             item.created = datetime.utcnow().replace(tzinfo=utc)
             item.updated = datetime.utcnow().replace(tzinfo=utc)
             item.save()
