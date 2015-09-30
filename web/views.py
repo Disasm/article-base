@@ -77,7 +77,7 @@ def fill_tags(item, tags):
 # get tag cloud
 @login_required()
 def get_tags(request):
-    tags = Tag.with_counts(request.user)
+    tags = Tag.with_counts()
     return render(request, 'tags.html', {'tags': tags})
 
 # get item list and subtags
@@ -163,7 +163,7 @@ def item_add(request):
             item.updated = datetime.utcnow().replace(tzinfo=utc)
             item.save()
 
-            fill_tags(item, cd['tags'], request.user)
+            fill_tags(item, cd['tags'])
 
             return HttpResponseRedirect('/item/%d' % item.id)
     else:
@@ -185,7 +185,7 @@ def item_edit(request, id):
             item.updated = datetime.utcnow().replace(tzinfo=utc)
             item.save()
 
-            fill_tags(item, cd['tags'], request.user)
+            fill_tags(item, cd['tags'])
 
             return HttpResponseRedirect('/item/%d' % item.id)
     else:
