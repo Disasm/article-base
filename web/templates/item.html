@@ -25,6 +25,10 @@
         <td><a href="{{ item.url }}"><i class="icon-download-alt"></i>{{ item.filename }}</a></td>
     </tr>
     <tr>
+        <th>Размер</th>
+        <td>{{ item.size|filesizeformat }}</td>
+    </tr>
+    <tr>
         <th>Добавлен</th>
         <td>{{ item.created }}</td>
     </tr>
