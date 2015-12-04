@@ -51,10 +51,10 @@ def get_tag(name, kind):
         return tag
     except ObjectDoesNotExist:
         kind_obj = None
-        try:
-            kind_obj = TagKind.objects.get(name=kind)
-        except ObjectDoesNotExist:
-            if kind != None:
+        if kind != None:
+            try:
+                kind_obj = TagKind.objects.get(name=kind)
+            except ObjectDoesNotExist:
                 kind_obj = TagKind()
                 kind_obj.name = kind
                 kind_obj.description = "{kind_%s}" % kind
@@ -177,7 +177,10 @@ def item_add(request):
             item.save()
 
             tags = {}
-            tags['year'] = str(cd['year'])
+            if cd['year'] is None:
+                tags['year'] = ""
+            else:
+                tags['year'] = str(cd['year'])
             tags['people'] = cd['authors']
             tags['company'] = cd['company']
             tags[None] = cd['tags']
