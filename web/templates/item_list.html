@@ -8,6 +8,7 @@
         {% if item.description %}{{ item.description }}<br/>{% endif %}
         <a href="{{ item.url }}"><i class="icon-download-alt"></i> скачать</a>
         <a href="/item/{{ item.id }}/edit/"><i class="icon-pencil"></i> редактировать</a><br/>
+        <br/>
         Теги:
         {% for tag in item.tags.all %}
             <a href="/tag/{{ tag.id }}/" style="white-space: nowrap;">
