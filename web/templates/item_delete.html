@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+
+{% block content %}
+    <form action='.' enctype="multipart/form-data" method="post" class="form-horizontal long-form">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <br/></br/>
+        Вы действительно хотите удалить документ <a href="/item/{{item.id}}/">{{item.name}}</a>?<br/>
+        <br/>
+        <input type="submit" value="Удалить" class="btn btn-danger" />
+    </form>
+{%endblock %}
+

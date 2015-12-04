@@ -28,3 +28,6 @@ class EditItemForm(forms.Form):
     description = forms.CharField(max_length=200, required=False)
     tags = forms.CharField(max_length=500, required=False)
 
+class DeleteItemForm(forms.Form):
+    pass
+

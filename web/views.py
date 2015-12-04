@@ -1,5 +1,5 @@
 from web.models import Tag, TagKind, Item, ItemTag
-from web.forms import AddItemForm, EditItemForm
+from web.forms import AddItemForm, EditItemForm, DeleteItemForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -214,6 +214,32 @@ def item_edit(request, id):
     else:
         form = EditItemForm(initial={'name': item.name, 'description': item.description, 'tags': item.tag_string()})
     return render(request, 'item_add.html', {'form': form, 'edit': True})
+
+# delete item
+@login_required
+def item_delete(request, id):
+    id = int(id)
+    item = get_object_or_404(Item, pk=id)
+    if request.method == 'POST':
+        # delete file
+        dir_path = os.path.join(settings.STATIC_ROOT, 'files', item.uid)
+        path = os.path.join(dir_path, item.filename)
+        try:
+            os.unlink(path)
+        except:
+            pass
+        try:
+            os.rmdir(path)
+        except:
+            pass
+
+        # delete from database
+        item.delete()
+
+        return HttpResponseRedirect('/items/')
+    else:
+        form = DeleteItemForm()
+    return render(request, 'item_delete.html', {'form': form, 'item': item})
 
 # get item list
 @login_required

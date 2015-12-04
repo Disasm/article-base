@@ -15,7 +15,8 @@
                 {{ tag.name }}</a>{% if not forloop.last %},{% endif %}
         {% endfor %}
         <br/>
-        <a href="/item/{{ item.id }}/edit/"><i class="icon-pencil"></i> редактировать</a><br/>
+        <a href="/item/{{ item.id }}/edit/"><i class="icon-pencil"></i> редактировать</a>
+        <a href="/item/{{ item.id }}/delete/"><i class="icon-trash"></i> удалить</a><br/>
     </div>
     <br/>
     {% endfor %}

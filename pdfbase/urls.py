@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^items/$', 'web.views.item_list'),
     url(r'^item/(?P<id>\d+)/$', 'web.views.item_show'),
     url(r'^item/(?P<id>\d+)/edit/$', 'web.views.item_edit'),
+    url(r'^item/(?P<id>\d+)/delete/$', 'web.views.item_delete'),
     url(r'^tags/$', 'web.views.get_tags'),
     url(r'^tag/(?P<tags>[\d,]+)/$', 'web.views.get_tag_items'),
 
