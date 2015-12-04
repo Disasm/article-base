@@ -219,7 +219,7 @@ def item_edit(request, id):
 @login_required
 def item_list(request):
     page = request.GET.get('page')
-    latest_item_list = Item.objects.all().order_by('-updated')
+    latest_item_list = Item.objects.all().order_by('-created')
     paginator = Paginator(latest_item_list, 10)
     try:
         items = paginator.page(page)
