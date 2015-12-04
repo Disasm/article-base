@@ -1,4 +1,4 @@
-from web.models import Tag, Item, ItemTag
+from web.models import Tag, TagKind, Item, ItemTag
 from web.forms import AddItemForm, EditItemForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, render, get_object_or_404
@@ -45,33 +45,46 @@ def paginator_post_process(page, delta = 3):
     page.paginator.page_numbers = l
     return page
 
-def get_tag(name):
+def get_tag(name, kind):
     try:
         tag = Tag.objects.get(name=name)
         return tag
     except ObjectDoesNotExist:
+        kind_obj = None
+        try:
+            kind_obj = TagKind.objects.get(name=kind)
+        except ObjectDoesNotExist:
+            if kind != None:
+                kind_obj = TagKind()
+                kind_obj.name = kind
+                kind_obj.description = "{kind_%s}" % kind
+                kind_obj.icon = "{kind_icon_%s}" % kind
+                kind_obj.save()
+
         tag = Tag()
         tag.name = name
+        tag.kind = kind_obj
         tag.save()
         return tag
 
-def fill_tags(item, tags):
-    l = tags.split(',')
-    names = []
-    for tag in l:
-        tag = tag.strip()
-        if len(tag) > 0:
-            names.append(tag)
-    names = sorted(list(set(names)))
-    if len(names)==0:
-        names.append('unknown')
+def fill_tags(item, tag_map):
+    tags = []
+    for kind in tag_map.keys():
+        l = tag_map[kind].split(',')
+        for tag in l:
+            tag = tag.strip()
+            if len(tag) > 0:
+                tags.append((tag, kind))
+    tags = sorted(list(set(tags)))
+    if len(tags)==0:
+        tags.append(('unknown', None))
 
     # remove old tags
     ItemTag.objects.filter(item=item).delete()
 
     # add new tags
-    for name in names:
-        tag = get_tag(name)
+    for (name, kind) in tags:
+        tag = get_tag(name, kind)
         ItemTag.objects.create(item=item, tag=tag)
 
 # get tag cloud
@@ -163,7 +176,12 @@ def item_add(request):
             item.updated = datetime.utcnow().replace(tzinfo=utc)
             item.save()
 
-            fill_tags(item, cd['tags'])
+            tags = {}
+            tags['year'] = str(cd['year'])
+            tags['people'] = cd['authors']
+            tags['company'] = cd['company']
+            tags[None] = cd['tags']
+            fill_tags(item, tags)
 
             return HttpResponseRedirect('/item/%d' % item.id)
     else:
