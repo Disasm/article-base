@@ -5,6 +5,10 @@ from django.conf import settings
 class AddItemForm(forms.Form):
     name = forms.CharField(label="Название", max_length=500)
     description = forms.CharField(label="Описание", max_length=200, required=False)
+
+    kinds = ['статья', 'презентация', 'книга']
+    kinds = tuple(zip(kinds, kinds)) + (('', 'другой'),)
+    kind = forms.ChoiceField(label="Тип", choices=kinds, required=False)
     year = forms.DecimalField(label="Год издания", max_value=9999, required=False)
     authors = forms.CharField(label="Авторы", max_length=500, required=False)
     company = forms.CharField(label="Коллектив", max_length=200, required=False)

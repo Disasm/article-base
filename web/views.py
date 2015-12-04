@@ -183,6 +183,7 @@ def item_add(request):
                 tags['year'] = str(cd['year'])
             tags['people'] = cd['authors']
             tags['company'] = cd['company']
+            tags['type'] = cd['kind']
             tags[None] = cd['tags']
             fill_tags(item, tags)
 
