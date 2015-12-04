@@ -206,7 +206,9 @@ def item_edit(request, id):
             item.updated = datetime.utcnow().replace(tzinfo=utc)
             item.save()
 
-            fill_tags(item, cd['tags'])
+            tags = {}
+            tags[None] = cd['tags']
+            fill_tags(item, tags)
 
             return HttpResponseRedirect('/item/%d' % item.id)
     else:
