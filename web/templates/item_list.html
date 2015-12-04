@@ -6,8 +6,7 @@
     <div class="box">
         <b><a class="name" href="/item/{{ item.id }}/">{{ item.name }}</a></b><br/>
         {% if item.description %}{{ item.description }}<br/>{% endif %}
-        <a href="{{ item.url }}"><i class="icon-download-alt"></i> скачать</a>
-        <a href="/item/{{ item.id }}/edit/"><i class="icon-pencil"></i> редактировать</a><br/>
+        <a href="{{ item.url }}"><i class="icon-download-alt"></i> скачать</a><br/>
         <br/>
         Теги:
         {% for tag in item.tags.all %}
@@ -15,6 +14,8 @@
                 <i class="{% if tag.kind %}{{tag.kind.icon}}{%else%}icon-tag{%endif%}"></i>
                 {{ tag.name }}</a>{% if not forloop.last %},{% endif %}
         {% endfor %}
+        <br/>
+        <a href="/item/{{ item.id }}/edit/"><i class="icon-pencil"></i> редактировать</a><br/>
     </div>
     <br/>
     {% endfor %}
