@@ -5,7 +5,9 @@
 <div class="box">
     Теги:
     {% for tag in current_tags %}
-        <a href="/tag/{{ tag.id }}/">{{ tag.name }}</a>{% if not forloop.last %},{% endif %}
+        <a href="/tag/{{ tag.id }}/" style="white-space: nowrap;">
+            <i class="{% if tag.kind %}{{tag.kind.icon}}{%else%}icon-tag{%endif%}"></i>
+            {{ tag.name }}</a>{% if not forloop.last %},{% endif %}
     {% endfor %}
 </div>
 <br/>
