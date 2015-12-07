@@ -8,7 +8,7 @@ class AddItemForm(forms.Form):
 
     kinds = ['статья', 'презентация', 'книга', 'диссертация', 'материалы']
     kinds = tuple(zip(kinds, kinds)) + (('', 'другой'),)
-    kind = forms.ChoiceField(label="Тип", choices=kinds, required=False)
+    kind = forms.ChoiceField(label="Тип", choices=kinds, required=False, initial=kinds[0][1])
     year = forms.DecimalField(label="Год издания", max_value=9999, required=False)
     authors = forms.CharField(label="Авторы", max_length=500, required=False)
     company = forms.CharField(label="Коллектив", max_length=200, required=False)
